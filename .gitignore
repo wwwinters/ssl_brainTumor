@@ -1,0 +1,12 @@
+bakas/
+BraTS/
+post/
+.ipynb_checkpoints/
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.gz
+*.out

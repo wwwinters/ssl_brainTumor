@@ -1,0 +1,151 @@
+% \documentclass[12pt]{article}
+\documentclass[12pt, onecolumn]{IEEEtran}
+% \documentclass[12pt, twocolumn]{IEEEtran}
+\usepackage{color,soul}
+\usepackage{ifpdf}
+
+\usepackage{amsmath}
+\usepackage{algorithmic}
+\usepackage{array}
+\ifCLASSOPTIONcompsoc
+\usepackage[caption=false,font=footnotesize,labelfont=sf,textfont=sf]{subfig}
+\else
+\usepackage[caption=false,font=footnotesize]{subfig}
+\fi
+\usepackage{stfloats}
+\usepackage{url}
+\hyphenation{op-tical net-works semi-conduc-tor}
+\usepackage{colortbl}
+
+\ifCLASSOPTIONcompsoc
+\usepackage[nocompress]{cite}
+\else
+\usepackage{cite}
+\fi
+
+
+\ifCLASSINFOpdf
+\usepackage[pdftex]{graphicx}
+\graphicspath{{../pdf/}{../jpeg/}}
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+\usepackage[dvips]{graphicx}
+\DeclareGraphicsExtensions{.eps}
+\fi
+
+\usepackage{color,soul}
+\graphicspath{{../pdf/}{../jpeg/}}
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\usepackage{mdwmath}
+\usepackage{mdwtab}
+\usepackage{eqparbox}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\usepackage[caption=false]{subfig}
+\usepackage{booktabs}
+\usepackage{amssymb,amsfonts}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{algorithmic}
+\usepackage[]{algorithm2e}
+\usepackage{pifont}
+\usepackage{verbatim}
+\usepackage{tabularx}
+\usepackage{textcomp}
+\usepackage{float}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{cite}
+\usepackage[normalem]{ulem} 
+\usepackage{orcidlink}
+\usepackage{longtable}
+
+
+
+\begin{document}
+
+\title{Post-Operative Brain Tumor Residue Detection using Transfer Learning and ML Classification Algorithms}
+
+\author{William W. Winters \\
+MSDS 692: Data Science Practicum 1 \\
+Anderson College of Business and Computing \\
+Regis University, Denver, CO, USA \\
+\texttt{wwinters@regis.edu}}
+
+
+\maketitle
+
+
+\begin{abstract}
+Brain tumors significantly impact an individual's quality of life, affecting their personality, ability to work, and life expectancy if left untreated. Accurate diagnosis is crucial, and magnetic resonance imaging (MRI) scans are the primary diagnostic tool. While radiologists play a vital role in interpreting these scans, recent studies have highlighted the potential for diagnostic errors.  Research has shown that factors such as high workloads and bias can lead to mis-classification of images. For instance, a study by Zang et al. \cite{zang2023} found that diagnostic errors can occur in 3.5\% to 4.5\% of cases. Another study by Kasalak et al. \cite{kasalak2023} reported similar errors in real-time radiology practices, attributing them to heavy workloads. Previous studies on this subject have explored the use of artificial intelligence (AI) and machine learning (ML) to improve brain tumor detection from MRI images. However, these studies have primarily focused on pre-surgery diagnosis. This study aims to build upon existing research by developing a PyTorch CNN model that can accurately classify brain tumor images as either being positive for a tumor or not. After training the model, I will use it to infer if post-operative brain tumor images contain residual neoplasm material or not.  By concentrating on this specific area, I hope to improve the accuracy of post-operative brain tumor diagnosis and follow-up care.
+\end{abstract}
+
+
+\section{Introduction/Background}
+Many studies have been conducted on using AI/ML algorithms to detect brain tumors from MRI images. The goal is to develop a computer-aided diagnosis (CAD) system that can detect brain tumors in their early stages. Researchers have proposed various methods based on traditional machine learning and deep learning techniques. Both traditional machine learning (TML) and deep learning (DL) have their advantages and disadvantages. Aloraini et al. \cite{aloraini2023} compared the pros and cons of TML and DL for brain tumor detection and found that the DL method outperfor the TML due to automatic, high-level, and robust feature extraction mechanism.  Akter et al.\cite{akter2024} evaluated brain tumor classification using a widely available public MRI dataset and assessed the performance of several pre-trained convolutional neural network (CNN) models, including LeNet, AlexNet, VGG16, VGG19, and ResNet50. Their results showed that ResNet50, combined with careful data cleaning, achieved the highest classification accuracy. Building on this work, this study will employ a ResNet50-based architecture for brain tumor classification.
+
+
+
+\section{Problem Statement}
+While investigating the use of convolutional neural networks (CNN) for brain tumor detection, the author discovered a recurring issue where many researchers were using the same labeled dataset that consisted of healthy and brain tumor images. Although the primary goal of these studies was brain tumor detection, there was little effort to aid radiologists in identifying brain tumor material in post-surgery images.  Brain tumor removal is a complex procedure that can leave behind residual tissue if not fully excised. The likelihood of the tumor growing back increases significantly if it is not completely removed. Therefore, accurately determining if a tumor has been completely removed is a critical factor in determining the rest of the patient's treatment plan.
+
+This study will build on previous work with Pytorch CNN brain tumor classification but focus on fine-tuning the model to detect post-operative brain tumor residue.
+
+\section{Related Work}
+
+
+\section{Methodology/Approach}
+
+
+\section{Data Description}
+
+
+\section{Expected Outcomes}
+This project involves developing a Convolutional Neural Network (CNN) using PyTorch to classify brain tumor images as either positive or negative. The model will be trained on widely publicly available MRI datasets of brain tumor images.  
+Since there are two practicum classes, this study will consist of two major phases.  The first phase's schedule is outlined in the table below.  The end result will be a PyTorch CNN using an architecture similar to ResNet50.  For the second practicum class the CNN model will be replaced with a fully self-supervised learning (SSL) model.  The primary goal is to then use this model to classify post-operative MRI images as either having residual tumor tissue (positive) or not (negative).
+
+However, there is a challenge in finding publicly available post-resection brain tumor images that have been labeled for training.  The first phase of this study will attempt to use different CNN architectures to examine post-operative brain tumor images and attempt to classify them as positive or negative for brain tumor residue.  Since there is no reliable method to determine if the post-resection images are being classified correctly, The author will continue this study into a second phase (Practicum 2) where the focus will shift from implementing traditional supervised CNN image classification to self-supervised learning (SSL).  This approach aims to create a model that can learn from unlabeled data; thereby, overcoming the need for labeled image datasets.
+
+\section{Timeline}
+\begin{table}[H]
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\rowcolor[HTML]{EFEFEF} 
+		Phase 1                             & Timeframe & Description                                                                                                                                                                                                                                                                 \\ \hline
+		Collect and Process Images          & Week 1    & \begin{tabular}[c]{@{}l@{}}Identify brain MRI sources and download datasets from them.\\ Create python scripts to extract image information from the datasets\\ and save in a common image format such as png. Develop plan on\\ how to feed images into model\end{tabular} \\ \hline
+		Research and Review of  Literature  & Week 2    & \begin{tabular}[c]{@{}l@{}}Limit review of literature to peer-reviewed articles and develop an\\ annotated bibliography\end{tabular}                                                                                                                                        \\ \hline
+		Select Model and Method             & Week 3    & \begin{tabular}[c]{@{}l@{}}Based on the review of literature select the model and method to use\\ for PyTorch CNN supervised learning\end{tabular}                                                                                                         \\ \hline
+		Code and Train Model                & Week 4    & Create model using Jupyter-lab, Pytorch, and Python                                                                                                                                                                                                                         \\ \hline
+		Evaluate Results                    & Week 5    & Evaluate model's performance using accuracy and F1 scores                                                                                                                                                                                                                   \\ \hline
+		Fine Tune Model                     & Week 6    & Base on accuracy and F1 scores, fine tune the model                                                                                                                                                                                                                         \\ \hline
+		Complete Paper and Present Findings & Week 7    & Pull it all together                                                                                                                                                                                                                                                        \\ \hline
+	\end{tabular}
+\end{table}
+
+\section{Conclusion}
+Provide a synthesizing overview of your practicum proposal that reinforces its significance and coherence. Briefly recapitulate the central problem your project addresses and the key approaches you will employ. Emphasize the \textbf{unique contribution} your work aims to make to both data science as a field and the specific domain or organization involved. Reflect on the educational value of the project, highlighting how it represents the culmination of your data science studies and preparation for professional practice. This section should leave readers with a clear understanding of why your project matters and why you are well-positioned to execute it successfully, serving as a final, compelling argument for the merit and promise of your proposed practicum.
+
+
+\vspace{0.5cm}
+
+\noindent \textbf{Note:} The final practicum report must cover the following components:
+\begin{enumerate}
+  \item Project Title 
+  \item Abstract
+  \item Introduction/Background of the Project
+  \item Problem Statement
+  \item Literature Review/Related Work \textcolor{red}{Optional}
+  % \item Objectives of the Study
+  \item Methodology/Proposed Approach \textcolor{red}{End of the course}
+  \item Data Analysis \textcolor{blue}{Collection/Acquisition, Preparation, EDA, Visualization, Reporting} \textcolor{red}{End of the course}
+  \item Expected Outcomes
+  \item Timeline
+  \item Conclusion \textcolor{red}{End of the course}
+  \item Reference
+\end{enumerate}
+
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,references}
+
+\end{document}
