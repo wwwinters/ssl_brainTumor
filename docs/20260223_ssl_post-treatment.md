@@ -222,3 +222,240 @@ Would you like me to:
 4. Handle **multi-timepoint studies** (e.g., baseline + follow-up)?
 
 Let me know — happy to adapt this to your pipeline! 🧠🔍
+
+---
+# Version 2 - Show how to Visualize the Crop ROI
+Great! Visualizing the crop ROI (Region of Interest) is essential for **debugging**, **validation**, and **explaining model behavior**. Below are **practical, production-ready visualization scripts** using `matplotlib` and `numpy`, with options for **interactive slicing** (e.g., in Jupyter).
+
+We'll cover:
+- ✅ Static slice-based visualization (best for reports/notes)
+- ✅ Interactive 3D slice viewer (best for debugging)
+- ✅ Overlay cropped ROI on original image
+- ✅ Save as PDF/PNG (publication-ready)
+
+---
+
+## 🎯 Goal
+Given:
+- Original MRI volume (e.g., T1-weighted)
+- Binary tumor mask
+- Cropping bounding box `(x_min, x_max, y_min, y_max, z_min, z_max)`
+
+Produce visualizations like:
+```
+[Original MRI slice]  +  [Mask overlay]  +  [Cropped ROI box on slice]
+```
+
+---
+
+## 🔧 Step 1: Helper Functions
+
+### A. Plot a slice with ROI bounding box
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.patches import Rectangle
+
+def plot_slice_with_roi(
+    image, 
+    mask, 
+    bbox, 
+    slice_idx=None,
+    title='MRI with Tumor ROI',
+    cmap='bone',
+    figsize=(10, 4)
+):
+    '''
+    Args:
+        image: 3D numpy array (H, W, D)
+        mask:  3D binary array (H, W, D)
+        bbox:  (x_min, x_max, y_min, y_max, z_min, z_max)
+        slice_idx: int or None (auto-center on tumor)
+        title: str
+    '''
+    x_min, x_max, y_min, y_max, z_min, z_max = bbox
+    
+    # Auto-select slice: best = center of ROI in z (superior-inferior axis)
+    if slice_idx is None:
+        z_center = (z_min + z_max) // 2
+    else:
+        z_center = slice_idx
+
+    # Clamp to valid range
+    z_center = max(z_min, min(z_center, image.shape[2] - 1))
+    
+    # Extract slice
+    img_slice = image[:, :, z_center]
+    mask_slice = mask[:, :, z_center]
+
+    # Plot
+    fig, axes = plt.subplots(1, 3, figsize=figsize)
+    
+    # 1. Original MRI
+    axes[0].imshow(img_slice, cmap=cmap, origin='lower')
+    axes[0].set_title('Original T1')
+    axes[0].axis('off')
+
+    # 2. Mask overlay
+    axes[1].imshow(img_slice, cmap=cmap, origin='lower')
+    axes[1].imshow(mask_slice, cmap='cool', alpha=0.5, vmin=0, vmax=1, origin='lower')
+    axes[1].set_title('Tumor Mask')
+    axes[1].axis('off')
+
+    # 3. ROI highlight with box
+    axes[2].imshow(img_slice, cmap=cmap, origin='lower')
+    axes[2].imshow(mask_slice, cmap='cool', alpha=0.5, vmin=0, vmax=1, origin='lower')
+    
+    # Draw ROI rectangle
+    # Note: xy = (y_min, x_min) because matplotlib uses (col, row) = (y, x)
+    rect = Rectangle(
+        xy=(y_min, x_min), 
+        width=y_max - y_min, 
+        height=x_max - x_min,
+        linewidth=3, edgecolor='red', facecolor='none'
+    )
+    axes[2].add_patch(rect)
+    
+    # Also mark z-slice used (text)
+    axes[2].text(5, 20, f'z = {z_center}', color='white', fontsize=12,
+                 bbox=dict(facecolor='black', alpha=0.7))
+    
+    axes[2].set_title('Cropped ROI (Red Box)')
+    axes[2].axis('off')
+
+    plt.suptitle(title, fontsize=14)
+    plt.tight_layout()
+    plt.show()
+    return fig
+```
+
+> 💡 **Why 3 columns?**  
+> Column 1: Context (original)  
+> Column 2: Ground truth (mask)  
+> Column 3: What the model sees (ROI box)  
+> This helps verify the crop aligns with tumor.
+
+---
+
+### B. Optional: Save to file
+```python
+fig = plot_slice_with_roi(image, mask, bbox, title='Case #042: Pre-op T1 + Tumor ROI')
+fig.savefig('case042_crop_validation.png', dpi=300, bbox_inches='tight')
+print('✅ Saved visualization to 'case042_crop_validation.png'')
+```
+
+---
+
+## 🌐 Step 2: Interactive Viewer (Best for Jupyter!)
+
+Use `ipympl` + sliders to explore all slices + see ROI evolution:
+
+```python
+from ipywidgets import interact, IntSlider
+import matplotlib.pyplot as plt
+
+def interactive_roi_viewer(image, mask, bbox):
+    x_min, x_max, y_min, y_max, z_min, z_max = bbox
+    
+    @interact(z_slice=IntSlider(
+        value=(z_min + z_max)//2,
+        min=0, max=image.shape[2]-1, 
+        step=1,
+        description='z-slice'
+    ))
+    def plot_slice(z_slice):
+        # Clamp z_slice to ROI range (for quick inspection)
+        z_clamped = max(z_min, min(z_slice, z_max))
+        img_slice = image[:, :, z_clamped]
+        mask_slice = mask[:, :, z_clamped]
+
+        fig, ax = plt.subplots(1, 2, figsize=(10, 4))
+        
+        # Left: ROI context
+        ax[0].imshow(img_slice, cmap='bone', origin='lower')
+        ax[0].set_title(f'Full slice: z = {z_clamped}')
+        
+        # Draw full ROI box in context
+        rect = Rectangle(
+            (y_min, x_min), y_max-y_min, x_max-x_min,
+            linewidth=3, edgecolor='red', facecolor='none'
+        )
+        ax[0].add_patch(rect)
+        ax[0].axis('off')
+        
+        # Right: Zoomed-in crop
+        crop_img = img_slice[x_min:x_max+1, y_min:y_max+1]
+        crop_mask = mask_slice[x_min:x_max+1, y_min:y_max+1]
+        
+        ax[1].imshow(crop_img, cmap='bone', origin='lower')
+        ax[1].imshow(crop_mask, cmap='cool', alpha=0.5, vmin=0, vmax=1, origin='lower')
+        ax[1].set_title('Cropped ROI (zoomed)')
+        ax[1].axis('off')
+
+        plt.tight_layout()
+        plt.show()
+```
+
+### 🧪 Usage:
+```python
+interactive_roi_viewer(t1_data, tumor_mask, bbox)
+```
+→ Now use the slider to jump through slices **inside and outside** the tumor ROI and see how the crop changes.
+
+---
+
+## 🔍 Real-World Example (End-to-End)
+
+```python
+# Simulate data (replace with real NIfTI loading: nibabel)
+import nibabel as nib
+
+# Load real data
+nii = nib.load('BraTS2021_case001/T1.nii.gz')
+t1_data = nii.get_fdata()
+mask_data = nib.load('BraTS2021_case001/Seg.nii.gz').get_fdata()
+
+# Crop ROI (same as earlier)
+bbox = get_bounding_box(mask_data, margin=10)  # (x_min, x_max, y_min, y_max, z_min, z_max)
+
+# Visualize
+plot_slice_with_roi(t1_data, mask_data, bbox, 
+                    title='BraTS2021 Case #001: T1w + ROI Validation')
+```
+
+> ✅ **Expected output**:  
+> - Left: T1 slice with tumor (iso-intense region)  
+> - Middle: Mask overlaid  
+> - Right: Same slice + **red box** tightly enclosing the tumor + margin  
+> - Box should *not* clip the tumor!
+
+---
+
+## 🚨 Critical Checks (When Reviewing Visuals)
+1. **Box doesn’t cut through tumor**: ROI fully contains tumor mask.
+2. **Consistent slice**: Same z for all modalities (if multi-sequence).
+3. **Affine alignment**: If box seems misaligned → re-check registration.
+4. **Margin reasonable?** 10–20 voxels (e.g., ~2–4 mm at 1mm iso) → adjust as needed.
+
+---
+
+## 📦 Bonus: MONAI + Plotting (for pipelines already using MONAI)
+
+If you're using MONAI's transforms:
+```python
+from monai.transforms import Compose, LoadImage, ScaleIntensity, CropForegroundd
+from monai.visualize import plot_2d_or_3d_image
+
+# After applying CropForegroundd (or custom CropByMaskd), inspect:
+plot_2d_or_3d_image(cropped_volume, dim=2, max_channels=1, fig_ax=(fig, ax), title='Cropped Volume')
+```
+
+---
+
+Let me know which you'd like next:
+- 🖼️ Full Jupyter notebook template (with `nbconvert`-ready code)
+- 📉 Generate *multiple* ROI visualizations (grid for paper)
+- 🎥 Export to GIF/video of 3D crop navigation
+- 📊 Statistical ROI quality metrics (e.g., coverage %, overlap Jaccard before/after crop)
+
+Happy to tailor! 🧠
