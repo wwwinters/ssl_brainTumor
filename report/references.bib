@@ -149,6 +149,17 @@
   abstract = {Unsupervised image representations have significantly reduced the gap with supervised pretraining, notably with the recent achievements of contrastive learning methods. These contrastive methods typically work online and rely on a large number of explicit pairwise feature comparisons, which is computationally challenging. In this paper, we propose an online algorithm, SwAV, that takes advantage of contrastive methods without requiring to compute pairwise comparisons. Specifically, our method simultaneously clusters the data while enforcing consistency between cluster assignments produced for different augmentations (or views) of the same image, instead of comparing features directly as in contrastive learning. Simply put, we use a swapped prediction mechanism where we predict the cluster assignment of a view from the representation of another view. Our method can be trained with large and small batches and can scale to unlimited amounts of data. Compared to previous contrastive methods, our method is more memory efficient since it does not require a large memory bank or a special momentum network. In addition, we also propose a new data augmentation strategy, multi-crop, that uses a mix of views with different resolutions in place of two full-resolution views, without increasing the memory or compute requirements much. We validate our findings by achieving 75.3\% top-1 accuracy on ImageNet with ResNet-50, as well as surpassing supervised pretraining on all the considered transfer tasks.}
 }
 
+@misc{chen2019,
+  title         = {Med3D: Transfer Learning for 3D Medical Image Analysis},
+  author        = {Sihong Chen and Kai Ma and Yefeng Zheng},
+  year          = {2019},
+  eprint        = {1904.00625},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.CV},
+  url           = {https://arxiv.org/abs/1904.00625},
+  abstract      = {The performance on deep learning is significantly affected by volume of training data. Models pre-trained from massive dataset such as ImageNet become a powerful weapon for speeding up training convergence and improving accuracy. Similarly, models based on large dataset are important for the development of deep learning in 3D medical images. However, it is extremely challenging to build a sufficiently large dataset due to difficulty of data acquisition and annotation in 3D medical imaging. We aggregate the dataset from several medical challenges to build 3DSeg-8 dataset with diverse modalities, target organs, and pathologies. To extract general medical three-dimension (3D) features, we design a heterogeneous 3D network called Med3D to co-train multi-domain 3DSeg-8 so as to make a series of pre-trained models. We transfer Med3D pre-trained models to lung segmentation in LIDC dataset, pulmonary nodule classification in LIDC dataset and liver segmentation on LiTS challenge.}
+}
+
 @article{chen2020,
   author        = {Ting Chen and Simon Kornblith and Kevin Swersky and Mohammad Norouzi and Geoffrey Hinton},
   title         = {Big Self-Supervised Models are Strong Semi-Supervised Learners},
@@ -355,7 +366,7 @@
   abstract = {In this study, we propose a novel self-supervised learning (SSL) framework that integrates three complementary pretext task, colorization, jigsaw puzzle solving, and patch prediction, to enhance feature learning from unlabeled endoscopic images. By leveraging these tasks, our model extracts rich, meaning-ful representations, improving the downstream classification of Z-line, esophageal, and antrum/pylorus regions. To further enhance feature extraction and model inter-pretability, we incorporate attention mechanisms, transformer-based architectures, and Grad-CAM visualization}
 }
 
-@misc{perez-garcia2020,
+ @misc{perez-garcia2020,
   author    = {Fernando Pérez-García and Roman Rodionov and Ali Alim-Marvasti and Rachel Sparks and John Ducan and Sebastien Ourselin},
   title     = {'EPISURG: MRI dataset for quatitative analysis of resective neurosurgery for refractory epilepsy'},
   publisher = {University College London},
@@ -375,7 +386,7 @@
                - Rater 3: 33 subjects (neurologist)'}
 }
 
- @article{reyes2024,
+@article{reyes2024,
   authors  = {Daniel Reyes and Javier Sánchez},
   title    = {Performance of convolutional neural networks for the classification of brain tumors using magnetic resonance imaging},
   journal  = {Heliyon},
