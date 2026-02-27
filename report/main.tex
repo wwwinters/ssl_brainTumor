@@ -63,7 +63,7 @@
 
 \begin{document}
 
-\title{Post-Operative Brain Tumor Residue Detection using Transfer Learning and ML Classification Algorithms}
+\title{Post-Treatment Brain Tumor Segmentation using MONAI SegResNet Model}
 
 \author{William W. Winters \\
 MSDS 692: Data Science Practicum 1 \\
@@ -76,21 +76,61 @@ Regis University, Denver, CO, USA \\
 
 
 \begin{abstract}
-Brain tumors significantly impact an individual's quality of life, affecting their personality, ability to work, and life expectancy if left untreated. Accurate diagnosis is crucial, and magnetic resonance imaging (MRI) scans are the primary diagnostic tool. While radiologists play a vital role in interpreting these scans, recent studies have highlighted the potential for diagnostic errors.  Research has shown that factors such as high workloads and bias can lead to mis-classification of images. For instance, a study by Zang et al. \cite{zang2023} found that diagnostic errors can occur in 3.5\% to 4.5\% of cases. Another study by Kasalak et al. \cite{kasalak2023} reported similar errors in real-time radiology practices, attributing them to heavy workloads. Previous studies on this subject have explored the use of artificial intelligence (AI) and machine learning (ML) to improve brain tumor detection from MRI images. However, these studies have primarily focused on pre-surgery diagnosis. This study aims to build upon existing research by developing a PyTorch CNN model that can accurately classify brain tumor images as either being positive for a tumor or not. After training the model, I will use it to infer if post-operative brain tumor images contain residual neoplasm material or not.  By concentrating on this specific area, I hope to improve the accuracy of post-operative brain tumor diagnosis and follow-up care.
+Determining the effectiveness of brain tumor treatments from post-treatment MRI images is an area where little research has been conducted.  Current studies primarily focus on tumor detection, where MRI images clearly distinguish between healthy and tumorous tissue.  The MR Images used in these studies clearly delineate between healthy and tumor images.  For these cases, a Convolutional neural network (CNN) can be used to effectively classify these images as tumor-positive or negative.  However, post-treatment imaging presents a challenge due to the obscuration of tumor cavities by edema and disrupted blood-brain barriers (BBB).  As a result, CNNs trained on well-defined tumor images often perform poorly on post-treatment images, leading to incorrect classifications. 
+
+This study aims to address this limitation by training a \textbf{SegResNet} from MONAI on a BraTS-style dataset for image segmentation.  The trained model will be applied to a post-treatment dataset of glioma patients to segment the images and determine the presence or absence of tumor tissue.  Accurate segmentation will enable the assessment of residual tumor tissue, which is crucial for developing informed treatment plans.  By focusing on this specific area, this research seeks to improve the accuracy of post-treatment brain tumor diagnosis and follow-up care.
 \end{abstract}
 
 
 \section{Introduction/Background}
-Many studies have been conducted on using AI/ML algorithms to detect brain tumors from MRI images. The goal is to develop a computer-aided diagnosis (CAD) system that can detect brain tumors in their early stages. Researchers have proposed various methods based on traditional machine learning and deep learning techniques. Both traditional machine learning (TML) and deep learning (DL) have their advantages and disadvantages. Aloraini et al. \cite{aloraini2023} compared the pros and cons of TML and DL for brain tumor detection and found that the DL method outperfor the TML due to automatic, high-level, and robust feature extraction mechanism.  Akter et al.\cite{akter2024} evaluated brain tumor classification using a widely available public MRI dataset and assessed the performance of several pre-trained convolutional neural network (CNN) models, including LeNet, AlexNet, VGG16, VGG19, and ResNet50. Their results showed that ResNet50, combined with careful data cleaning, achieved the highest classification accuracy. Building on this work, this study will employ a ResNet50-based architecture for brain tumor classification.
+Despite a wealth of research on detecting brain tumors using MR Images, there is a notable gap in the literature on assessing the effectiveness of treatment through post-treatment imaging.  Current studies primarily focus on tumor detection where MR Images clearly distinguish between healthy and tumorous tissue.  Using these images, a Convolutional neural network (CNN) can be used to effectively classify them as tumor-positive or negative.  However, post-treatment imaging presents a challenge due to the murkiness of tumor cavities caused by edema, necrotic tissue, and disrupted blood-brain barriers.  CNNs trained on well-defined tumor images often perform poorly on post-treatment images, leading to incorrect classifications.  The main issue with CNN classification is that it does not distinguish between the different types of tissue displayed in an MR Image.  A better solution is to apply segmentation to the post-treatment image since it does label the different tissue types identified in the image.  One of the key advantages of segmentation is the ability to delineate tumors into specific areas such as necrotic core (NCR), enhancing tumor (ET), and peritumoral edema (ED)\cite{bonato2025}). 
 
-
+When a brain MRI is conducted, three common modalities are used.  Each one highlights different anatomical features of the brain and tumor. The table below outlines them 
+\begin{table}[H]
+    \centering
+    \caption{Brain MRI Modalities (Sequences)}
+	\begin{tabular}{|l|l|}
+		\hline
+		\textbf{SEQUENCE}    & \textbf{KEY USE}                                                                                                                                                             \\ \hline
+		T1w (Native)         & Reveals the structure and composition of various tissue types in the brain                                                                                                   \\ \hline
+		T1ce (post-contrast) & \begin{tabular}[c]{@{}l@{}}A contrast agent is injected into the patient which improves the visibility (intensity)\\ of abnormalities\end{tabular}                           \\ \hline
+		T2                   & Highlights fluid content within brain tissue                                                                                                                                 \\ \hline
+		FLAIR (T2f)          & \begin{tabular}[c]{@{}l@{}}Suppresses the effects of cerebrospinal fluid in the brain to better delineate the\\ peritumoral edema and infiltrative tumor edges\cite{bonato2025}\end{tabular} \\ \hline
+	\end{tabular}
+\end{table}
+The figure below illustrates how the four modalities are combined and color-coded by segmentation to assist with diagnosis.  These images are from a post-treatment \textit{glioma} patient.
+\begin{figure}[H]
+	\centering
+	\caption{Post-treatment Glioma MR Image}
+	\includegraphics[width=1.0\linewidth]{figures/mod_seg.jpg}
+\end{figure}
+Each sequence (modality) highlights different structures of the tumor cavity.  These structures are then combined into the mask image and color-coded to aid with diagnosis.  In the “Mask” image, the blue area surrounded by yellow is the core tumor (CT); yellow indicates disruptions to the blood-brain barrier and may indicate necrotic or scar tissue.  Green is edema (swelling).  While the displayed images are 2D, the MR Images are often stored as 3D or 3B images and include additional planes.  The table below explains the viewing planes.
+\begin{table}[H]
+	\centering
+	\caption{MR Image View Planes}
+	\begin{tabular}{|l|l|}
+		\hline
+		\textbf{PLANE} & \textbf{EXPLAINATION}                                  \\ \hline
+		Axial          & \textit{Represents "slices" of the body}               \\ \hline
+		Sagittal       & Images that are taken perpendicular to the axial plane \\ \hline
+		Coronal        & Images that are perpendicular to the sagittal plane    \\ \hline
+	\end{tabular}
+\end{table}
+These planes provide sufficient information for the segmentation model to form a 3D or 4D understanding of the region of interest (ROI).
 
 \section{Problem Statement}
-While investigating the use of convolutional neural networks (CNN) for brain tumor detection, the author discovered a recurring issue where many researchers were using the same labeled dataset that consisted of healthy and brain tumor images. Although the primary goal of these studies was brain tumor detection, there was little effort to aid radiologists in identifying brain tumor material in post-surgery images.  Brain tumor removal is a complex procedure that can leave behind residual tissue if not fully excised. The likelihood of the tumor growing back increases significantly if it is not completely removed. Therefore, accurately determining if a tumor has been completely removed is a critical factor in determining the rest of the patient's treatment plan.
+The use of convolutional neural networks (CNNs) for brain tumor detection has been explored in various studies, often relying on a specific labeled dataset comprising clearly defined healthy and tumorous MR images. However, a significant gap exists in these studies: they primarily focus on detecting brain tumors but provide limited support for radiologists in identifying tumor tissue in post-treatment images.  In addition, the author attempted to use a CNN model trained on the images described above to classify unlabeled post-treatment MR Images of various patients without success.  The model incorrectly classified tumor cavities as tumors, failing to distingush between the different tissue types within the cavity. 
 
-This study will build on previous work with Pytorch CNN brain tumor classification but focus on fine-tuning the model to detect post-operative brain tumor residue.
+This limitation highlights the need for an alternative approach. Further research suggests that image segmentation could be a viable solution, enabling the mapping and color-coding of different tissue types within the cavity. This capability would, in turn, facilitate the detection of brain tumor tissue in post-treatment images.
 
 \section{Related Work}
+Over the past few years, there has been significant growth in research on brain tumor quantification using magnetic resonance imaging (MRI) technology. Many of these studies have focused on developing state-of-the-art algorithms for tumor segmentation, often adapting techniques originally designed for other medical applications. While these methods have shown considerable accuracy in segmenting brain tumors, the field has progressed to develop algorithms specifically tailored for this purpose.  A key benchmark for these developments has been the work of the Multimodal Brain Tumor Image Segmentation (BraTS) organization, which has established a standard for evaluating brain tumor segmentation algorithms\cite{menze2015}.
+
+Building on this foundation, the Medical Open Network for Artificial Intelligence (MONAI) has developed a suite of PyTorch-based models and methods to facilitate the segmentation of brain tumor images.  According to MONAI, the application of artificial intelligence (AI) in healthcare holds great promise for improving the detection and diagnosis of diseases, including brain tumors. By automating and enhancing the analysis of medical images, AI can help enable more positive treatment outcomes\cite{cardoso2022}. Many of MONAI's models are built on top of the U-Net architecture, which was designed to address the limitations of traditional CNNs in biomedical image processing. Traditional CNNs used for image segmentation would have to examine each pixel in an image and predict its class label, a computationally and time intensive process. In contrast, U-Net takes a different approach: instead of predicting the class label of each individual pixel, it makes predictions based on regions of interest\cite{ronneberger2015}. This approach enables more efficient and effective image segmentation.
+
+While MONAI has made significant progress in developing U-Net-based models for brain tumor segmentation, other techniques are also worth exploring. For instance, Jin et al.\cite{jin2026} proposed applying a transformer model, typically used in natural language processing (NLP) applications, to this task. Their approach utilized a modified Swin Transformer and a patch acquisition strategy, which yielded acceptable results in improving segmentation performance. The authors further investigated this by suggesting a hybrid combination of Convolutional neural networks (CNNs) and transformers for image segmentation\cite{jin2026}.  A common thread among the techniques described so far is that they all require labeled data for training. In other words, the training dataset must be manually segmented, typically by a qualified radiologist. Although pre-trained models are available, they too rely on labeled data. An alternative approach that has been explored in the literature is self-supervised learning (SSL), which may offer a solution to this problem.  
+
+Recent breakthroughs in contrastive learning methods have significantly reduced the computational resources required for self-supervised learning. A notable approach is the algorithm proposed by Caron et al.\cite{caron2021}, which leverages contrastive learning without the need for pairwise comparisons. This method, called SwAV, simultaneously clusters data and enforces consistency between cluster assignments generated from different augmentations (or views) of the same image. The results show promise and may lead to the elimination of manually labeling image segmentation regions by qualified radiologists.   Another advantage of applying SSL models to image segmentation is that it mitigates human error in the labeling process. Research has shown that factors such as high workloads and bias can lead to misclassification of images. For example, a study by Zang et al.\cite{zang2023}. found that diagnostic errors occur in 3.5\% to 4.5\% of cases. Similarly, Kasalak et al.\cite{kasalak2023}. reported errors in real-time radiology practices, attributing them to heavy workloads. These mislabeled training data can compromise the accuracy of the model. By leveraging SSL models and reducing reliance on labeled images, the accuracy of image segmentation in brain tumor detection may significantly improve. 
 
 
 \section{Methodology/Approach}

@@ -92,7 +92,7 @@
 
 @articl{bonato2025,
   author  = {Beatrice Bonato and Loris Nanni and Alessandra Bertoldo},
-  title   = {'Advancing Precision: A Comprehensive Review of MRI Segmentation Datasets from BraTS Challenges \(2012\–2025\)'},
+  title   = {'Advancing Precision: A Comprehensive Review of MRI Segmentation Datasets from BraTS Challenges (2012-2025)'},
   journal = {Sensors},
   volume  = {25},
   number  = {6},
@@ -215,6 +215,29 @@
   abstract = {In this study, we propose intermediate feature approxima-tion (IFA) loss, which improves the performance of contrastive convolutional neural networks by focusing more on positive representations of CXRs without additional augmentations. The IFA loss encourages the feature maps of a query image and its positive pair to resemble each other by maximizing the cosine similarity between the intermediate feature outputs of the original data and the positive pairs. Therefore, we used the InfoNCE loss, which is commonly used loss to address negative representations, and the IFA loss, which addresses positive representations, together to improve the contrastive network. We evaluated the performance of the network using various downstream tasks, including classification, object detection, and a generative adversarial network (GAN) inversion task.}
 }
 
+@article{cicek2016,
+  author        = {Özgün Çiçek and Ahmed Abdulkadir and Soeren S. Lienkamp and Thomas Brox and Olaf Ronneberger},
+  title         = {3D U-Net: Learning Dense Volumetric Segmentation from Sparse Annotation},
+  eprint        = {1606.06650},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.CV},
+  year          = {2016},
+  url           = {https://arxiv.org/abs/1606.06650},
+  doi           = {https://doi.org/10.48550/arXiv.1606.06650}
+}
+
+@article{davar2025,
+  author  = {Somayeh, Davar and Thomas Fevens},
+  title   = {Enhanced U-Net Architecture for Brain Tumor Localization and Segmentation in T1-Weighted MRI},
+  journal = {IEEE Transactions on Circuits and Systems},
+  volume  = {72},
+  number  = {8},
+  pages   = {993-997},
+  year    = {2025},
+  url     = {https://doi.org/10.1109/TCSII.2025.3556846},
+  doi     = {10.1109/TCSII.2025.3556846}
+}
+
 @conference{dosviskiy2021,
   author       = {Alexey Dosoviskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn, Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg Heigold, Sylvain Gelly, Jakob Uszkoreit and Neil Houylsby},
   title        = {'An image is worth 16 x 16 words: Transformers for image recognition as scale'},
@@ -275,6 +298,16 @@
   abstract  = {'The MRI images were sourced from multiple existing datasets, primarily from Kaggle. Only those image files that were relevant to tumor classification were retained for the study. To streamline the classification process, the data was organized into four main categories: Glioma, Meningioma, Pituitary, and No Tumor. Efforts were made to remove any duplicate images across the datasets, ensuring that redundancy was minimized. No additional preprocessing, such as resizing or normalization, was performed on the images, allowing researchers the flexibility to apply their own preprocessing pipelines as per their specific needs.  This looks like an enhanced version of Cheng's figshare dataset'}
 }
 
+@article{jin2026,
+  author  = {Chengcheng Jin and Nor Sarfira Elaina Mohd Noor and Theam Foo Ng and Mohd Shahrimie Mohd Asaari and Haidi Ibrahim},
+  title   = {Transformer-based architectures in MRI brain tumor segmentation: A review},
+  journal = {Computerized Medical Imaging and Graphics},
+  volume  = {129},
+  year    = {2026},
+  url     = {https://doi-org.dml.regis.edu/10.1016/j.compmedimag.2026.102729},
+  doi     = {10.1016/j.compmedimag.2026.102729}
+}
+
 @misc{juvekar2023,
   author    = {P Juvekar and R Dorent and F Kögl and E Torio and C Barr and L Rigolo and C Galvin and N Jowkar and A Kazi and N Haouchine and H Cheema and N Navab and S Pieper and W.M. Wells and W.L. Bi and As Golby and Ss Frisken and T Kapur},
   title     = {The brain resection multimodal imaging database (ReMIND)(Version 1) dataset},
@@ -322,7 +355,7 @@
   abstract = {'Authors discuss using CNN for medical image classification, since they do segmentation automatically; however, there are some issues with using CNN for medical image classification that should be considered.  MRI images are not neccessarily clear, sometimes there are visualization defects the quality of the image; therefore, preprocessing of the images should be done carefully.}
 }
 
-@article{lee2025,
+ @article{lee2025,
   author   = {Lee, Myungeun and Kim, Jong Hyo and Choi, Wookjin, and Lee, Ki Hong},
   title    = {AI-assisted Segmentation Tool for Brain Tumor MR Image Analysis},
   journal  = {Journal of Imaging Informatics in Medicine},
@@ -363,7 +396,18 @@
   abstract      = {Self-supervised learning (SSL) is a machine learning approach where the data itself provides supervision, eliminating the need for external labels. The model is forced to learn about the data structure or context by solving a pretext task. With SSL, models can learn from abundant and cheap unlabeled data, significantly reducing the cost of training models where labels are expensive or inaccessible. In Computer Vision, SSL is widely used as pre-training followed by a downstream task, such as supervised transfer, few-shot learning on smaller labeled data sets, and/or unsupervised clustering. Unfortunately, it is infeasible to evaluate SSL methods on all possible downstream tasks and objectively measure the quality of the learned representation. Instead, SSL methods are evaluated using in-domain evaluation protocols, such as fine-tuning, linear probing, and k-nearest neighbors (kNN). However, it is not well understood how well these evaluation protocols estimate the representation quality of a pre-trained model for different downstream tasks under different conditions, such as dataset, metric, and model architecture. We study how classification-based evaluation protocols for SSL correlate and how well they predict downstream performance on different dataset types. Our study includes eleven common image datasets and 26 models that were pre-trained with different SSL methods or have different model backbones. We find that in-domain linear/kNN probing protocols are, on average, the best general predictors for out-of-domain performance. We further investigate the importance of batch normalization and evaluate how robust correlations are for different kinds of dataset domain shifts. We challenge assumptions about the relationship between discriminative and generative self-supervised methods, finding that most of their performance differences can be explained by changes to model backbones.}
 }
 
- @article{nezhad2025,
+@article{menze2015,
+  author  = {{Menze, Bjoern H. and Jakab, Andras and Bauer, Stefan and Kalpathy-Cramer, Jayashree and Farahani, Keyvan and Kirby, Justin and Burren, Yuliya and Porz, Nicole and Slotboom, Johannes and Wiest, Roland and Lanczi, Levente and Gerstner, Elizabeth and Weber, Marc-André and Arbel, Tal and Avants, Brian B. and Ayache, Nicholas and Buendia, Patricia and Collins, D. Louis and Cordier, Nicolas and Corso, Jason J. and Criminisi, Antonio and Das, Tilak and Delingette, Hervé and Demiralp, Çağatay and Durst, Christopher R. and Dojat, Michel and Doyle, Senan and Festa, Joana and Forbes, Florence and Geremia, Ezequiel and Glocker, Ben and Golland, Polina and Guo, Xiaotao and Hamamci, Andac and Iftekharuddin, Khan M. and Jena, Raj and John, Nigel M. and Konukoglu, Ender and Lashkari, Danial and Mariz, José António and Meier, Raphael and Pereira, Sérgio and Precup, Doina and Price, Stephen J. and Raviv, Tammy Riklin and Reza, Syed M. S. and Ryan, Michael and Sarikaya, Duygu and Schwartz, Lawrence and Shin, Hoo-Chang and Shotton, Jamie and Silva, Carlos A. and Sousa, Nuno and Subbanna, Nagesh K. and Szekely, Gabor and Taylor, Thomas J. and Thomas, Owen M. and Tustison, Nicholas J. and Unal, Gozde and Vasseur, Flor and Wintermark, Max and Ye, Dong Hye and Zhao, Liang and Zhao, Binsheng and Zikic, Darko and Prastawa, Marcel and Reyes, Mauricio and Van Leemput, Koen}},
+  title   = {The Multimodal Brain Tumor Image Segmentation Benchmark (BRATS)},
+  journal = {IEEE Transactions on Medical Imaging},
+  volume  = {34},
+  number  = {10},
+  pages   = {1993-2024},
+  url     = {https://doi.org/10.1109/TMI.2014.2377694},
+  doi     = {10.1109/TMI.2014.2377694}
+}
+
+@article{nezhad2025,
   author   = {Shima Ayyoubi Nezhad and Golnaz Tejeddin and Toktam Khatibi and Masoudreza Sohrabi},
   title    = {Self-supervised learning framework for efficient classification of enoscopic images using pretext tasks},
   journal  = {PLoS One},
@@ -410,6 +454,28 @@
   doi      = {https://doi.org/10.1016/j.heliyon.2024.e25468},
   abstract = {'Authors present a comprehensive analysis of various CNNs applied to the    
               classification of brain tumors. To assess the performance of the models, they analyzed the training process from different perspectives, such as training from scratch, using data augmentation, and transfer learning.  Architectures evaluated include: VGG, ResNet, DenseNet, Xception, EfficientNet, MobileNet, and COnvNetXt. The study use Cheng's figshare dataset consisting of 3000 images to do their evaluation.}
+}
+
+@article{ronneberger2015,
+  author        = {Olaf Ronneberger and Philipp Fischer and Thomas Brox},
+  title         = {U-Net: Convolutional Networks for Biomedical Image Segmenation},
+  eprint        = {1505.04597},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.CV},
+  url           = {https://arxiv.org/abs/1505.04597},
+  doi           = {https://doi.org/10.48550/arXiv.1505.04597}
+}
+
+@article{shen2026,
+  author  = {Jiantao Shen and Sung-Min Jun and Samantha J. Holdsworth and Gonzalo Maso Talou and Jason A. Correia and Hamid Abbasi},
+  title   = {Evaluating SegResNet for single-modality meningioma segmentation on T1 contrast-enhanced MRI on a New Zealand clinical cohort},
+  journal = {Neuroscience Informatics},
+  volume  = {6},
+  number  = {1},
+  pages   = {100261},
+  year    = {2026},
+  url     = {https://www.sciencedirect.com/science/article/pii/S2772528626000051},
+  doi     = {https://doi.org/10.1016/j.neuri.2026.100261}
 }
 
 @misc{simpson2019,
