@@ -144,6 +144,13 @@ A review of literature was conducted to help select a model to train and preform
 	\item It is part of the vast MONAI ecosystem
 \end{itemize}
 
+The figure below visually describes the SegResNet architecture
+\begin{figure}[H]
+	\centering
+	\caption{SegResNet Network Architecture. The network uses repeated ResNet blocks with Instance normalization\cite{siddique2022}}
+	\includegraphics[width=0.75\linewidth]{figures/SegResNet_architecture.png}
+\end{figure}
+
 The MONAI tutorial was closely followed with a few modifications to enhance its ability to effectively train with the MSD dataset.  Mainly, an early-stopping mechanism was added to stop the training loop when validation loss bottomed out for a set number of epochs.  When processing NIfTI volumes there are four input channels the model has to deal with. Namely, T1w, T1ce, T2w, and FLAIR.  All of these channels are used for segmentation.  In addition, there are three planes of view to consider.  For this study, only the axial plan was analyzed; however, other planes could have been added to aid in computing the volume of the different tumor structures that are segmented.  Under the BraTS labeling standard the following output channels can be segmented and labeled.  These include:
 \begin{table}[h]
 	\centering
@@ -158,15 +165,15 @@ The MONAI tutorial was closely followed with a few modifications to enhance its 
 		4              & enhancing tumor (ET)\cite{bonato2025}                             \\ \hline
 	\end{tabular}
 \end{table}
-For this study the output labels were collapsed into three output labels: peritumoral edema (ED) (label 1), GD-enhancing tumor (ET) (label 2), and the necrotic and non-enhancing tumor core(NCR/NET).  The possible classes are TC (tumor core), WT (whole tumor) and ET (enhancing tumor).
+For this study the output labels were collapsed into three output labels: peritumoral edema (ED) (label 1), GD-enhancing tumor (ET) (label 2), and the necrotic and non-enhancing tumor core(NCR/NET) (label 3).  The possible classes are TC (tumor core), WT (whole tumor) and ET (enhancing tumor).
 
 \section{Data Description}
 The training data used in this study were obtained from the \textbf{Medical Segmentation Decathlon (MSD)}, which includes a subset of data from the BraTS (Brain Tumor Image Segmentation) challenges (specifically, the BraTS 2016–2017 datasets) \cite{bakas2017}. The dataset comprises 750 multi-parametric MR brain scans from patients with either glioblastoma (GBM) or lower-grade glioma (LGG). Each scan includes the following MR sequences: native T1-weighted (T1), T1-weighted post-gadolinium enhancement (T1ce), T2-weighted (T2), and T2 Fluid-Attenuated Inversion Recovery (T2-FLAIR or T2f). All samples were co-registered to a reference atlas space using the SRI24 brain structure template, resampled to isotropic voxel resolution of 1 $mm^3$, and skull-stripped using various methods followed by manual refinements.  All annotations for the tumor sub-regions were approved by expert board-certified neuroradiologist\cite{simpson2019}.  484 volumes and their labels comprised the training dataset and the validation dataset used contained 266 volumes.  This dataset can be downloaded from the \textit{Medical Segmentation Decathlon} Google Drive or AWS S3 bucket\cite{decath2022}. All brain tumor MR Image files downloaded from BraTS or the Medical Segmentation Decathlon are in NIfTI format.  NIfTI stands for the \textit{Neuroimaging Informatics Technology Initiative} and can be recognized by their file ending of \texttt{*.nii} or \texttt{*.nii.gz}. The format used by NIfTI files store metadata and images in a single package\cite{nifti}.
 
-Since the BraTS challenge is specifically focused on brain tumor segmentation, the organizers of the Medical Segmentation Decathlon aimed to establish an international competition that addresses medical image segmentation across a broader range of anatomical structures and pathologies—not limited to a single disease \cite{antonelli2022}. The Decathlon provides multi-modal MR images of various organs, including the heart, liver, hippocampus, prostate, and others.
+Since the BraTS challenge is specifically focused on brain tumor segmentation, the organizers of the Medical Segmentation Decathlon aimed to establish an international competition that addresses medical image segmentation across a broader range of anatomical structures and pathologies -- not limited to a single disease \cite{antonelli2022}. The Decathlon provides multi-modal MR images of various organs, including the heart, liver, hippocampus, prostate, and others.
 
 \section{Expected Outcomes}
-A \textbf{SegResNet} mode will be trained to preform brain segmentation on a BraTS derived dataset.  The model will then be able to accurately preform segmentation on the validation dataset with acceptable accuracy.  Model weights will be saved and used for to preform segmentation on a post-treatment \textit{glioma} brain tumor dataset.  
+A \textbf{SegResNet} model will be trained to perform brain tumor segmentation on a BraTS-derived dataset. Following training, the model will achieve clinically acceptable segmentation accuracy on the validation set, as evaluated by standard metrics (e.g., Dice coefficient, Hausdorff distance). The trained model weights will be saved and applied to segment post-treatment glioma cases. This post-treatment segmentation can help quantify residual or recurrent tumor burden, enabling more objective assessment of treatment response and supporting evidence-based clinical decision-making in neuro-oncology.
 
 \section{Timeline}
 \begin{table}[H]
