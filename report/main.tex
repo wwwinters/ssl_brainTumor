@@ -243,7 +243,11 @@ Below is a visualization of the inferred regions
 	\centering
 	\caption{Color-coded Segmentation map for MR Image}
 	\includegraphics[width=0.75\linewidth]{figures/segFull.jpg}
-\end{figure} 
+\end{figure}
+
+\subsection{Further Research}
+This study trained a segmentation model using a publicly available architecture and applied it to a post-treatment MRI, achieving reasonable segmentation accuracy—a result consistent with prior literature. However, the approach required labeled data in the form of manual segmentations for each training volume. Manually segmenting MRI scans is labor-intensive, time-consuming, and Prone to inter- and intra-rater variability. While supervised learning remains common, recent advances have increasingly shifted toward self-supervised learning (SSL) to reduce reliance on costly annotated data. Given its potential to improve efficiency and scalability, SSL in medical image segmentation warrants further investigation.
+ 
 \vspace{0.5cm}
 
 \bibliographystyle{IEEEtran}
