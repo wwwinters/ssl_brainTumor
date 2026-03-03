@@ -133,8 +133,12 @@ While MONAI has made significant progress in developing U-Net-based models for b
 Recent breakthroughs in contrastive learning methods have significantly reduced the computational resources required for self-supervised learning. A notable approach is the algorithm proposed by Caron et al.\cite{caron2021}, which leverages contrastive learning without the need for pairwise comparisons. This method, called SwAV, simultaneously clusters data and enforces consistency between cluster assignments generated from different augmentations (or views) of the same image. The results show promise and may lead to the elimination of manually labeling image segmentation regions by qualified radiologists.   Another advantage of applying SSL models to image segmentation is that it mitigates human error in the labeling process. Research has shown that factors such as high workloads and bias can lead to mis-classification of images. For example, a study by Zang et al.\cite{zang2023}. found that diagnostic errors occur in 3.5\% to 4.5\% of cases. Similarly, Kasalak et al.\cite{kasalak2023} reported approximately the same error rate as Zang in real-time radiology practices, attributing them to heavy workloads. These mislabeled training data can compromise the accuracy of a model. By leveraging SSL models and reducing reliance on labeled images, the accuracy of image segmentation in brain tumor detection may significantly improve.  The use of SSL in medical image segmentation is a domain that warrants further study. 
 
 \section{Methodology/Approach}
+This study conducted a intensive review of literature, selected a method to apply, trained a segmentation mode, then used the model to segment a post-treatment MR Image volume.
+
+\subsection{Background}
 Many studies utilize brain tumor MR Images from Kaggle.com, chosen for their accessibility and widespread citation in current literature as publicly available source of brain MRI datasets. However, concerns regarding the accuracy of image labels have been raised within the research community.  To ensure data reliability, the author limited his analysis to images sourced from credible, clinically validated medical imaging repositories. The shift to high-quality, clinically acquire MR Images introduced new challenges, since such images are typically stored in the NIfTI format as 3D volumetric data.  Consequently, additional research was required to understand and process this file format effectively.  All of the images used in this study can trace their origins to the Cancer Imaging Archive (TCIA) the only difference between the downstream and origin volumes is how the modalities are represented.  Images directly acquired from TCIA are not processed and each modality is stored in its own NIfTI volume.  MSD images, on the other hand, have been processed and the modalities have been stacked into a single NIfTI volume.  After identifying data sources a file storage strategy was developed and implemented.  Over 140GB of NIfTI volumes were downloaded from TCIA and MSD.  These were stored in two different repositories.
 
+\subsection{Model Selection}
 A review of literature was conducted to help select a model to train and preform brain tumor MR Image segmentation.  MONAI has a collection of modern models that are optimized for image segmentation that are based on the N-Net architecture and compatible with PyTorch's framework.  In addition, the MONAI site has image segmentation tutorials using its models and processes.  A 2026 study singled out MONAI's SegResNet model as providing adequate accuracy with smaller datasets\cite{shen2026}.  In addition, it has the following characteristics which makes it a good fit for this study:
 
 \begin{itemize}
@@ -151,6 +155,7 @@ The figure below visually describes the SegResNet architecture
 	\includegraphics[width=0.75\linewidth]{figures/SegResNet_architecture.png}
 \end{figure}
 
+\subsection{Model Development}
 The MONAI tutorial was closely followed with a few modifications to enhance its ability to effectively train with the MSD dataset.  Mainly, an early-stopping mechanism was added to stop the training loop when validation loss bottomed out for a set number of epochs.  When processing NIfTI volumes there are four input channels the model has to deal with. Namely, T1w, T1ce, T2w, and FLAIR.  All of these channels are used for segmentation.  In addition, there are three planes of view to consider.  For this study, only the axial plan was analyzed; however, other planes could have been added to aid in computing the volume of the different tumor structures that are segmented.  Under the BraTS labeling standard the following output channels can be segmented and labeled.  These include:
 \begin{table}[h]
 	\centering
@@ -241,8 +246,8 @@ A random image from a post-treatment glioma patient dataset obtained from TCIA w
 Below is a visualization of the inferred regions
 \begin{figure}[H]
 	\centering
-	\caption{Color-coded Segmentation map for MR Image}
-	\includegraphics[width=0.75\linewidth]{figures/segFull.jpg}
+	\caption{Inference Output Labels from MR Image}
+	\includegraphics[width=0.75\linewidth]{figures/onnx_outlab.jpg}
 \end{figure}
 
 \subsection{Further Research}
