@@ -1,6 +1,6 @@
 % \documentclass[12pt]{article}
 \documentclass[12pt, onecolumn]{IEEEtran}
-% \documentclass[12pt, twocolumn]{IEEEtran}
+%\documentclass[12pt, twocolumn]{IEEEtran}
 \usepackage{color,soul}
 \usepackage{ifpdf}
 
@@ -177,6 +177,8 @@ A \textbf{SegResNet} model will be trained to perform brain tumor segmentation o
 
 \section{Timeline}
 \begin{table}[H]
+	\centering
+	\caption{Project Timeline}
 	\begin{tabular}{|l|l|l|}
 		\hline
 		\rowcolor[HTML]{EFEFEF} 
@@ -193,9 +195,55 @@ A \textbf{SegResNet} model will be trained to perform brain tumor segmentation o
 \end{table}
 
 \section{Conclusion}
-Provide a synthesizing overview of your practicum proposal that reinforces its significance and coherence. Briefly recapitulate the central problem your project addresses and the key approaches you will employ. Emphasize the \textbf{unique contribution} your work aims to make to both data science as a field and the specific domain or organization involved. Reflect on the educational value of the project, highlighting how it represents the culmination of your data science studies and preparation for professional practice. This section should leave readers with a clear understanding of why your project matters and why you are well-positioned to execute it successfully, serving as a final, compelling argument for the merit and promise of your proposed practicum.
+While substantial research exists on detecting brain tumors using MRI, there remains a gap in the literature regarding the assessment of treatment response through post-treatment imaging. In this study, we trained a segmentation model using a BraTS-style dataset and applied it to segment post-treatment MRI scans from a glioma post-treatment dataset available in the Cancer Imaging Archive (TCIA) \cite{yaseen2025}. Segmentation performance was evaluated using the standard Dice similarity coefficient (DSC).
+\subsection{Training and Validation}
+Like other CNN training scenarios training and validation datasets were used during the model's training process. Segmentation uses different metrics to gauge model performance.  Validation loss and Dice coefficient are tracked and recorded.  In addition, the Dice score for each region of interest (ROI)is tracked and used for evaluation.  This figure below displays the average validation loss and mean Dice score for each epoch.
+\begin{figure}[H]
+	\centering
+	\caption{Validation Loss and Dice Scores per Epoch}
+	\includegraphics[width=0.75\linewidth]{figures/val_loss_dice.jpg}
+\end{figure}
+Furthermore, the Dice score for tumor core (TC), whole tumor (WT), and enhancing tumor (ET) were also recorded for each epoch and indicates which ROIs segmented accurately and which ones did not.
+\begin{figure}[H]
+	\centering
+	\caption{Validation Mean Dice Score for TC, WT, and ET}
+	\includegraphics[width=0.75\linewidth]{figures/val_dice_scores.jpg}
+\end{figure}
 
+Average validation Dice scores are described in the following table.
+\begin{table}[h]
+	\centering
+	\caption{Average Dice Score during Training}
+	\begin{tabular}{|l|l|}
+		\hline
+		\textbf{METRIC}    & \textbf{VALUE} \\ \hline
+		Mean Dice Score    & 0.71           \\ \hline
+		TC Mean Dice Score & 0.76           \\ \hline
+		WT Mean Dice Score & 0.86           \\ \hline
+		ET Mean Dice Score & 0.50           \\ \hline
+	\end{tabular}
+\end{table}
 
+\subsection{Inference}
+A random image from a post-treatment glioma patient dataset obtained from TCIA was selected and segmentation from the model's best training weights were applied to it.  The table below contains the values of interest.
+\begin{table}[h]
+	\centering
+	\caption{Inference Dice Scores on Post-Treatment Image}
+	\begin{tabular}{|l|l|}
+		\hline
+		\textbf{METRIC}    & \textbf{VALUE} \\ \hline
+		Mean Dice Score    & 0.61           \\ \hline
+		TC Mean Dice Score & 0.65           \\ \hline
+		WT Mean Dice Score & 0.77           \\ \hline
+		ET Mean Dice Score & 0.42           \\ \hline
+	\end{tabular}
+\end{table}
+Below is a visualization of the inferred regions
+\begin{figure}[H]
+	\centering
+	\caption{Color-coded Segmentation map for MR Image}
+	\includegraphics[width=0.75\linewidth]{figures/segFull.jpg}
+\end{figure} 
 \vspace{0.5cm}
 
 \bibliographystyle{IEEEtran}

@@ -16,5 +16,13 @@ The limitation of using CNN trained on pre-operative brain tumor imaging highlig
 
 ![Segmentation](assets/bt_sep_segmentation.png)
 
+## Model Selection
+Many modern segmentation models used in international competitions such as **Brain Tumor Segmentation (BraTS)** challenge and the **Medical Segmentation Decathlon (MSD)** are based on the U-Net architecture.  The model selected for this study is from MONAI (Medical Open Network for AI) called 3D-SegResNet.  MONAI's models are part of the PyTorch/Lightning ecosystem and are trained and used like any other PyTorch model.  SegResNet was selected for the following reasons
+- It is a residual encoder/decoder CNN designed specifically for 2D/3D medical segmentation
+- Uses less GPU resources than a transformer-style model making it a good fit for training with consumer grade GPUs
+- Is a top performer in challenges like BraTS
+
+![SegResNet Architecture](assets/SegResNet_architecture.png)
+
 ## Contact
 For questions or inquiries, please contact **Wiley Winters** at [wwinters@regis.edu](mailto:wwinters@regis.edu).
