@@ -157,7 +157,8 @@ The figure below visually describes the SegResNet architecture
 
 \subsection{Model Development}
 The MONAI tutorial was closely followed with a few modifications to enhance its ability to effectively train with the MSD dataset.  Mainly, an early-stopping mechanism was added to stop the training loop when validation loss bottomed out for a set number of epochs.  When processing NIfTI volumes there are four input channels the model has to deal with. Namely, T1w, T1ce, T2w, and FLAIR.  All of these channels are used for segmentation.  In addition, there are three planes of view to consider.  For this study, only the axial plan was analyzed; however, other planes could have been added to aid in computing the volume of the different tumor structures that are segmented.  Under the BraTS labeling standard the following output channels can be segmented and labeled.  These include:
-\begin{table}[h]
+
+\begin{table}[H]
 	\centering
 	\caption{BraTS Standard Segmentation Labels}
 	\begin{tabular}{|l|l|}
@@ -216,7 +217,7 @@ Furthermore, the Dice score for tumor core (TC), whole tumor (WT), and enhancing
 \end{figure}
 
 Average validation Dice scores are described in the following table.
-\begin{table}[h]
+\begin{table}[H]
 	\centering
 	\caption{Average Dice Score during Training}
 	\begin{tabular}{|l|l|}
@@ -231,7 +232,7 @@ Average validation Dice scores are described in the following table.
 
 \subsection{Inference}
 A random image from a post-treatment glioma patient dataset obtained from TCIA was selected and segmentation from the model's best training weights were applied to it.  The table below contains the values of interest.
-\begin{table}[h]
+\begin{table}[H]
 	\centering
 	\caption{Inference Dice Scores on Post-Treatment Image}
 	\begin{tabular}{|l|l|}
