@@ -85,7 +85,7 @@ This study aims to address this limitation by training a \textbf{SegResNet} from
 \section{Introduction/Background}
 Despite a wealth of research on detecting brain tumors using MR Images, there is a notable gap in the literature on assessing the effectiveness of treatment through post-treatment imaging.  Current studies primarily focus on tumor detection where MR Images clearly distinguish between healthy and tumorous tissue.  Using these images, a Convolutional neural network (CNN) can be used to effectively classify them as tumor-positive or negative.  However, post-treatment imaging presents a challenge due to the murkiness of tumor cavities caused by edema, necrotic tissue, and disrupted blood-brain barriers.  CNNs trained on well-defined tumor images often perform poorly on post-treatment images, leading to incorrect classifications.  The main issue with CNN classification is that it does not distinguish between the different types of tissue displayed in an MR Image.  A better solution is to apply segmentation to the post-treatment image since it does label the different tissue types identified in the image.  One of the key advantages of segmentation is the ability to delineate tumors into specific areas such as necrotic core (NCR), enhancing tumor (ET), and peritumoral edema (ED)\cite{bonato2025}). 
 
-When a brain MRI is conducted, three common modalities are used.  Each one highlights different anatomical features of the brain and tumor. The table below outlines them 
+When a brain MRI is conducted, four common modalities are used.  Each one highlights different anatomical features of the brain and tumor. The table below outlines them 
 \begin{table}[H]
     \centering
     \caption{Brain MRI Modalities (Sequences)}
@@ -104,7 +104,7 @@ The figure below illustrates how the four modalities are combined and color-code
 	\caption{Post-treatment Glioma MR Image}
 	\includegraphics[width=1.0\linewidth]{figures/mod_seg.jpg}
 \end{figure}
-Each sequence (modality) highlights different structures of the tumor cavity.  These structures are then combined into the mask image and color-coded to aid with diagnosis.  In the “Mask” image, the blue area surrounded by yellow is the core tumor (CT); yellow indicates disruptions to the blood-brain barrier and may indicate necrotic or scar tissue.  Green is edema (swelling).  While the displayed images are 2D, the MR Images are often stored as 3D or 3B images and include additional planes.  The table below explains the viewing planes.
+Each sequence (modality) highlights different structures of the tumor cavity.  These structures are then combined into the mask image and color-coded to aid with diagnosis.  In the “Mask” image, the blue area surrounded by yellow is the core tumor (CT); yellow indicates disruptions to the blood-brain barrier and may indicate necrotic or scar tissue.  Green is edema (swelling).  While the displayed images are 2D, the MR Images are often stored as 3D or 4D images and include additional planes.  The table below explains the viewing planes.
 \begin{table}[H]
 	\centering
 	\caption{MR Image View Planes}
@@ -201,9 +201,9 @@ A \textbf{SegResNet} model will be trained to perform brain tumor segmentation o
 \end{table}
 
 \section{Conclusion}
-While substantial research exists on detecting brain tumors using MRI, there remains a gap in the literature regarding the assessment of treatment response through post-treatment imaging. In this study, we trained a segmentation model using a BraTS-style dataset and applied it to segment post-treatment MRI scans from a glioma post-treatment dataset available in the Cancer Imaging Archive (TCIA) \cite{yaseen2025}. Segmentation performance was evaluated using the standard Dice similarity coefficient (DSC).
+While substantial research exists on detecting brain tumors using MRI, there remains a gap in the literature regarding the assessment of treatment response through post-treatment imaging. In this study, I trained a segmentation model using a BraTS-style dataset and applied it to segment post-treatment MRI scans from a glioma post-treatment dataset available in the Cancer Imaging Archive (TCIA) \cite{yaseen2025}. Segmentation performance was evaluated using the standard Dice similarity coefficient (DSC).
 \subsection{Training and Validation}
-Like other CNN training scenarios training and validation datasets were used during the model's training process. Segmentation uses different metrics to gauge model performance.  Validation loss and Dice coefficient are tracked and recorded.  In addition, the Dice score for each region of interest (ROI)is tracked and used for evaluation.  This figure below displays the average validation loss and mean Dice score for each epoch.
+Like other CNN training scenarios training and validation datasets were used during the model's training process. Segmentation uses different metrics to gauge model performance.  Validation loss and Dice coefficient are tracked and recorded.  In addition, the Dice score for each region of interest (ROI) is tracked and used for evaluation.  This figure below displays the average validation loss and mean Dice score for each epoch.
 \begin{figure}[H]
 	\centering
 	\caption{Validation Loss and Dice Scores per Epoch}
@@ -252,7 +252,7 @@ Below is a visualization of the inferred regions
 \end{figure}
 
 \subsection{Further Research}
-This study trained a segmentation model using a publicly available architecture and applied it to a post-treatment MRI, achieving reasonable segmentation accuracy—a result consistent with prior literature. However, the approach required labeled data in the form of manual segmentations for each training volume. Manually segmenting MRI scans is labor-intensive, time-consuming, and Prone to inter- and intra-rater variability. While supervised learning remains common, recent advances have increasingly shifted toward self-supervised learning (SSL) to reduce reliance on costly annotated data. Given its potential to improve efficiency and scalability, SSL in medical image segmentation warrants further investigation.
+This study trained a segmentation model using a publicly available architecture and applied it to a post-treatment MRI, achieving reasonable segmentation accuracy—a result consistent with prior literature. However, the approach required labeled data in the form of manual segmentation for each training volume. Manually segmenting MRI scans is labor-intensive, time-consuming, and Prone to inter- and intra-rater variability. While supervised learning remains common, recent advances have increasingly shifted toward self-supervised learning (SSL) to reduce reliance on costly annotated data. Given its potential to improve efficiency and scalability, SSL in medical image segmentation warrants further investigation.
  
 \vspace{0.5cm}
 
