@@ -24,5 +24,24 @@ Many modern segmentation models used in international competitions such as **Bra
 
 ![SegResNet Architecture](assets/SegResNet_architecture.png)
 
+## Model Training
+Training was accomplished using a standard PyTorch training function with a customer early stopping callback.  After around 27 epochs the callback halted the training cycle and the best weights were saved for later use.  Main measures for segmentation training are *Validation Average Loss* and *validation mean Dice score*.
+
+![Training Metrics](report/figures/val_loss_dice.jpg)
+
+## Inference Results
+Results were acceptable and more tuning will have to be completed
+| **METRIC**         | **VALUE** |
+|--------------------|-----------|
+| Mean Dice Score    | 0.61      |
+| TC mean Dice score | 0.65      |
+| WT mean Dice score | 0.77      |
+| ET mean Dice Score | 0.42      |
+
+![Inference Channels](report/figures/infer_imgChan.jpg)
+
+## Conclusions
+Performing segmentation on post-treatment MR Images can aid in identifying healthy brain tissue, core tumor residue, abnormalities to the blood-train barrier (BBB) and edema.
+
 ## Contact
 For questions or inquiries, please contact **Wiley Winters** at [wwinters@regis.edu](mailto:wwinters@regis.edu).
