@@ -14,7 +14,7 @@ Despite a wealth of research on detecting brain tumors using MR Images, there is
 
 The limitation of using CNN trained on pre-operative brain tumor imaging highlights the need for an alternative approach.  Further research suggests that image segmentation could be a viable solution, enabling the mapping and color-coding of different tissue types within the resection cavity.  This project aims to train a SegResNet model on BraTS-style brain tumor volumes, then use the model to preform segmentation on MR Images from a post-treatment glioma brain tumor dataset.  The following sequence of images are of a post-treatment glioma patient and normal tissue, blood-brain barrier (BBB), tumor core, and edema are clearly identified.  TC has been identified and highlighted with a red box.
 
-![Segmentation](assets/bt_sep_segmentation.png)
+![Segmentation](report/figures/mod_seg.jpg)
 
 ## Model Selection
 Many modern segmentation models used in international competitions such as **Brain Tumor Segmentation (BraTS)** challenge and the **Medical Segmentation Decathlon (MSD)** are based on the U-Net architecture.  The model selected for this study is from MONAI (Medical Open Network for AI) called 3D-SegResNet.  MONAI's models are part of the PyTorch/Lightning ecosystem and are trained and used like any other PyTorch model.  SegResNet was selected for the following reasons
@@ -22,7 +22,7 @@ Many modern segmentation models used in international competitions such as **Bra
 - Uses less GPU resources than a transformer-style model making it a good fit for training with consumer grade GPUs
 - Is a top performer in challenges like BraTS
 
-![SegResNet Architecture](assets/SegResNet_architecture.png)
+![SegResNet Architecture](report/figures/SegResNet_architecture.png)
 
 ## Model Training
 Training was accomplished using a standard PyTorch training function with a customer early stopping callback.  After around 27 epochs the callback halted the training cycle and the best weights were saved for later use.  Main measures for segmentation training are *Validation Average Loss* and *validation mean Dice score*.
@@ -30,15 +30,17 @@ Training was accomplished using a standard PyTorch training function with a cust
 ![Training Metrics](report/figures/val_loss_dice.jpg)
 
 ## Inference Results
-Results were acceptable and more tuning will have to be completed
+A representative image was selected at random from a post-treatment glioma patient dataset sourced from The Cancer Imaging Archive (TCIA). Semantic segmentation was performed on this image using the model’s best-performing training weights. The ground truth segmentation—manually delineated and provided as a NIfTI file within the dataset—was used to evaluate the model’s output. The Dice Similarity Coefficient (DSC) was computed between the model’s predicted segmentation and the ground truth mask. Summary metrics, including the DSC, are listed in the table below.
 | **METRIC**         | **VALUE** |
 |--------------------|-----------|
-| Mean Dice Score    | 0.61      |
-| TC mean Dice score | 0.65      |
-| WT mean Dice score | 0.77      |
-| ET mean Dice Score | 0.42      |
+| Mean Dice Score    | 0.49      |
+| TC mean Dice score | 0.61      |
+| WT mean Dice score | 0.73      |
+| ET mean Dice Score | 0.12      |
 
-![Inference Channels](report/figures/infer_imgChan.jpg)
+Below is the predicted regions overlayed over the base T1w image
+
+![Inference Channels](report/figures/post_overlay.jpg)
 
 ## Conclusions
 Performing segmentation on post-treatment MR Images can aid in identifying healthy brain tissue, core tumor residue, abnormalities to the blood-train barrier (BBB) and edema.

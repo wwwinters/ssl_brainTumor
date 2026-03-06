@@ -223,32 +223,36 @@ Average validation Dice scores are described in the following table.
 	\begin{tabular}{|l|l|}
 		\hline
 		\textbf{METRIC}    & \textbf{VALUE} \\ \hline
-		Mean Dice Score    & 0.71           \\ \hline
-		TC Mean Dice Score & 0.76           \\ \hline
-		WT Mean Dice Score & 0.86           \\ \hline
-		ET Mean Dice Score & 0.50           \\ \hline
+		Mean Dice Score    & 0.74           \\ \hline
+		TC Mean Dice Score & 0.80           \\ \hline
+		WT Mean Dice Score & 0.89           \\ \hline
+		ET Mean Dice Score & 0.54           \\ \hline
 	\end{tabular}
 \end{table}
 
+The Dice coefficient -- also known as the Dice similarity coefficient (DSC) -- is the most widely used metric for evaluating image segmentation performance. It quantifies the overlap between a predicted segmentation and the corresponding ground truth annotation. Ranging from 0 (no overlap) to 1 (perfect overlap), higher values indicate better agreement between the predicted and reference segmentation. As with many performance metrics in model training and evaluation, a value closer to 1 signifies superior segmentation accuracy for the region of interest (ROI)\cite{rainio2026}.  In BraTS competitions the DCS is computed for each ROI class (WT, TC, ET).  For WT a score of $\geq$ 0.85 is considered \textit{good}, a score of $\geq$ 0.80 is \textit{good} for TC, and a score of $\geq$ 0.75 for ET is \textit{good} for ET\cite{rainio2026}.
+ 
 \subsection{Inference}
-A random image from a post-treatment glioma patient dataset obtained from TCIA was selected and segmentation from the model's best training weights were applied to it.  The table below contains the values of interest.
+A representative image was selected at random from a post-treatment \textit{glioma} patient dataset sourced from The Cancer Imaging Archive (TCIA). Semantic segmentation was performed on this image using the model’s best-performing training weights. The ground truth segmentation—manually delineated and provided as a NIfTI file within the dataset—was used to evaluate the model’s output. The Dice Similarity Coefficient (DSC) was computed between the model’s predicted segmentation and the ground truth mask. Summary metrics, including the DSC, are listed in the table below.
 \begin{table}[H]
 	\centering
 	\caption{Inference Dice Scores on Post-Treatment Image}
 	\begin{tabular}{|l|l|}
 		\hline
 		\textbf{METRIC}    & \textbf{VALUE} \\ \hline
-		Mean Dice Score    & 0.61           \\ \hline
-		TC Mean Dice Score & 0.65           \\ \hline
-		WT Mean Dice Score & 0.77           \\ \hline
-		ET Mean Dice Score & 0.42           \\ \hline
+		Mean Dice Score    & 0.49           \\ \hline
+		TC Mean Dice Score & 0.62           \\ \hline
+		WT Mean Dice Score & 0.73           \\ \hline
+		ET Mean Dice Score & 0.12           \\ \hline
 	\end{tabular}
 \end{table}
+The ET segment usually scores low in this type of inference, since it is the smallest ROI being predicted.
+
 Below is a visualization of the inferred regions
 \begin{figure}[H]
 	\centering
 	\caption{Inference Output Labels from MR Image}
-	\includegraphics[width=0.75\linewidth]{figures/onnx_outlab.jpg}
+	\includegraphics[width=0.75\linewidth]{figures/post_overlay.jpg}
 \end{figure}
 
 \subsection{Further Research}
