@@ -126,10 +126,12 @@ This limitation highlights the need for an alternative approach. Further researc
 \section{Related Work}
 Over the past few years, there has been significant growth in research on brain tumor quantification using magnetic resonance imaging (MRI) technology. Many of these studies have focused on developing state-of-the-art algorithms for tumor segmentation, often adapting techniques originally designed for other medical applications. While these methods have shown considerable accuracy in segmenting brain tumors, the field has progressed to develop algorithms specifically tailored for this purpose.  A key benchmark for these developments has been the work of the Multimodal Brain Tumor Image Segmentation (\textbf{BraTS}) organization, which has established a standard for evaluating brain tumor segmentation algorithms\cite{menze2015}.
 
+\subsection{MONAI}
 Building on this foundation, the Medical Open Network for Artificial Intelligence (MONAI) has developed a suite of PyTorch-based models and methods to facilitate the segmentation of brain tumor images.  According to MONAI, the application of artificial intelligence (AI) in healthcare holds great promise for improving the detection and diagnosis of diseases, including brain tumors. By automating and enhancing the analysis of medical images, AI can help enable more positive treatment outcomes\cite{cardoso2022}. Many of MONAI's models are built on top of the U-Net architecture, which was designed to address the limitations of traditional CNNs in biomedical image processing. Traditional CNNs used for image segmentation would have to examine each pixel in an image and predict its class label, a computationally and time intensive process. In contrast, U-Net takes a different approach: instead of predicting the class label of each individual pixel, it makes predictions based on regions of interest\cite{ronneberger2015}. This approach enables more efficient and effective image segmentation.
  
 While MONAI has made significant progress in developing U-Net-based models for brain tumor segmentation, other techniques are also worth exploring. For instance, Jin et al.\cite{jin2026} proposed applying a transformer model, typically used in natural language processing (NLP) applications, to this task. Their approach utilized a modified Swin Transformer and a patch acquisition strategy, which yielded acceptable results in improving segmentation performance. The authors further investigated this by suggesting a hybrid combination of Convolutional neural networks (CNNs) and transformers for image segmentation\cite{jin2026}.  Another approach found in the literature is to use transfer learning.  This method trains a model on labeled data and the model is used to extract features from the target dataset which are then classified using another CNN\cite{chen2019}. A common thread among the techniques described so far is that they all require labeled data for training. In other words, the training dataset must be manually segmented, typically by a qualified radiologist. Although pre-trained models are available, they too rely on labeled data. An alternative approach that has been explored in the literature is self-supervised learning (SSL), which may offer a solution to this problem.  
 
+\subsection{Self-Supervised Learning}
 Recent breakthroughs in contrastive learning methods have significantly reduced the computational resources required for self-supervised learning. A notable approach is the algorithm proposed by Caron et al.\cite{caron2021}, which leverages contrastive learning without the need for pairwise comparisons. This method, called SwAV, simultaneously clusters data and enforces consistency between cluster assignments generated from different augmentations (or views) of the same image. The results show promise and may lead to the elimination of manually labeling image segmentation regions by qualified radiologists.   Another advantage of applying SSL models to image segmentation is that it mitigates human error in the labeling process. Research has shown that factors such as high workloads and bias can lead to mis-classification of images. For example, a study by Zang et al.\cite{zang2023}. found that diagnostic errors occur in 3.5\% to 4.5\% of cases. Similarly, Kasalak et al.\cite{kasalak2023} reported approximately the same error rate as Zang in real-time radiology practices, attributing them to heavy workloads. These mislabeled training data can compromise the accuracy of a model. By leveraging SSL models and reducing reliance on labeled images, the accuracy of image segmentation in brain tumor detection may significantly improve.  The use of SSL in medical image segmentation is a domain that warrants further study. 
 
 \section{Methodology/Approach}
@@ -234,6 +236,7 @@ The Dice coefficient -- also known as the Dice similarity coefficient (DSC) -- i
  
 \subsection{Inference}
 A representative image was selected at random from a post-treatment \textit{glioma} patient dataset sourced from The Cancer Imaging Archive (TCIA). Semantic segmentation was performed on this image using the model’s best-performing training weights. The ground truth segmentation—manually delineated and provided as a NIfTI file within the dataset—was used to evaluate the model’s output. The Dice Similarity Coefficient (DSC) was computed between the model’s predicted segmentation and the ground truth mask. Summary metrics, including the DSC, are listed in the table below.
+
 \begin{table}[H]
 	\centering
 	\caption{Inference Dice Scores on Post-Treatment Image}
@@ -246,9 +249,7 @@ A representative image was selected at random from a post-treatment \textit{glio
 		ET Mean Dice Score & 0.12           \\ \hline
 	\end{tabular}
 \end{table}
-The ET segment usually scores low in this type of inference, since it is the smallest ROI being predicted.
-
-Below is a visualization of the inferred regions
+Typically, the ET segment yields low scores in this type of inference, likely due to its small size. For reference, a figure is provided below with the inferred segmentation overlaid on a T1n image. To assess the accuracy of the model's predictions, a ground truth is necessary, which allows for the calculation of the Dice Similarity Coefficient (DSC).  
 \begin{figure}[H]
 	\centering
 	\caption{Inference Output Labels from MR Image}
